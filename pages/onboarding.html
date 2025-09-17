@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Refleqt.io - Stop Drowning in Data. Start Obsessing Smart.
+</title>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+/* Custom animations */
+@keyframes slideIn {
+from {
+transform: translateX(-100%);
+opacity: 0;
+}
+to {
+transform: translateX(0);
+opacity: 1;
+}
+}
+@keyframes fadeIn {
+from { opacity: 0; }
+to { opacity: 1; }
+}
+@keyframes pulse {
+0%, 100% { opacity: 1; }
+50% { opacity: 0.5; }
+}
+}
+.animate-slide-in {
+animation: slideIn 0.3s ease-out;
+.animate-fade-in {
+animation: fadeIn 0.5s ease-out;
+}
+.animate-pulse {
+animation: pulse 2s ease-in-out infinite;
+}
+/* Gradient backgrounds */
+.gradient-primary {
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+.gradient-text {
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+/* Glassmorphism effect */
+.glass {
+background: rgba(255, 255, 255, 0.95);
+backdrop-filter: blur(10px);
+border: 1px solid rgba(255, 255, 255, 0.18);
+}
+/* Custom scrollbar */
+::-webkit-scrollbar {
+width: 8px;
+height: 8px;
+}
+}
+::-webkit-scrollbar-track {
+background: #f1f1f1;
+::-webkit-scrollbar-thumb {
+background: #888;
+border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+background: #555;
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback, useMemo } = React;
+// Mock Data Manager
+class MockDataManager {
+constructor() {
+this.initializeData();
+}
+initializeData() {
+// Check if we have existing data in localStorage
+const existingData = localStorage.getItem('refleqtData');
+if (!existingData) {
+this.resetToDefaults();
+} else {
+this.data = JSON.parse(existingData);
+}
+}
+resetToDefaults() {
+this.data = {
+user: {
+id: this.generateId(),
+company: ''
+,
+industry: ''
+,
+obsessionScore: 5,
+onboardingComplete: false,
+featuresUnlocked: ['intelligence
+_
+feed'],
+createdAt: new Date().toISOString()
+},
+journey: {
+currentStage: 'onboarding'
+,
+actionsCompleted: [],
+lastLogin: new Date().toISOString(),
+sessionCount: 1
+},
+insights: this.generateMockInsights(),
+scenarios: this.generateMockScenarios()
+};
+this.save();
+}
+}
+generateId() {
+return 'user
+_
+' + Math.random().toString(36).substr(2, 9);
+generateMockInsights() {
+return [
+{
+id: 'ins
+1'
+,
+_
+type: 'competitor'
+,
+priority: 'high'
+,
+title: 'Major competitor just raised $10M Series A'
+,
+content: 'TechRival Inc. announced a $10M funding round led by Sequoia. They
+plan to expand their AI features and double their engineering team.
+'
+,
+timestamp: new Date(Date.now() - 3600000).toISOString(),
+actionable: true
+},
+{
+id: 'ins
+2'
+,
+_
+type: 'market'
+,
+priority: 'medium'
+,
+title: 'New regulatory framework affecting your industry'
+,
+content: 'The EU has announced new data privacy regulations that will impact
+SaaS companies starting Q2 2025.
+'
+,
+timestamp: new Date(Date.now() - 7200000).toISOString(),
+actionable: true
+},
+{
+id: 'ins
+3'
+,
+_
+type: 'opportunity'
+,
+priority: 'high'
+,
+title: 'Content gap detected: "AI implementation guides"'
+,
+content: 'Search volume for AI implementation guides in your niche has grown
+234% with zero comprehensive resources available.
+'
+,
+timestamp: new Date(Date.now() - 10800000).toISOString(),
+actionable: true
+}
+];
+}
+generateMockScenarios() {
+return [
+{
+id: 'sc
+1'
+,
+_
+title: 'Competitor Pricing Change'
+,
+template: 'What if a competitor reduces pricing by 30%?'
+,
+processingTime: 120
+},
+{
+id: 'sc
+2'
+,
+_
+title: 'Market Disruption'
+,
+template: 'How would AI automation affect our business model?'
+,
+processingTime: 120
+}
+];
+}
+}
+}
+save() {
+localStorage.setItem('refleqtData'
+, JSON.stringify(this.data));
+getUser() {
+return this.data.user;
+updateUser(updates) {
+this.data.user = { ...this.data.user, ...updates };
+this.save();
+}
+updateObsessionScore(delta) {
+const current = this.data.user.obsessionScore;
+const newScore = Math.max(1, Math.min(10, current + delta));
+this.data.user.obsessionScore = newScore;
+// Unlock features based on score
+if (newScore >= 3) {
+this.unlockFeature('strategy_
+cohorts');
+}
+if (newScore >= 5) {
+this.unlockFeature('research
+_
+swarms');
+}
+if (newScore >= 7) {
+this.unlockFeature('psychographics');
+this.unlockFeature('brewery');
+}
+if (newScore >= 9) {
+this.unlockFeature('expert
+_
+}
+matching');
+this.save();
+return newScore;
+}
+unlockFeature(feature) {
+if (!this.data.user.featuresUnlocked.includes(feature)) {
+this.data.user.featuresUnlocked.push(feature);
+}
+}
+}
+}
+isFeatureUnlocked(feature) {
+return this.data.user.featuresUnlocked.includes(feature);
+getInsights() {
+return this.data.insights;
+addInsight(insight) {
+this.data.insights.unshift(insight);
+if (this.data.insights.length > 10) {
+this.data.insights = this.data.insights.slice(0, 10); // Finite introspect
+}
+this.save();
+}
+}
+// Initialize mock data manager
+const mockData = new MockDataManager();
+// Navigation Component
+function Navigation({ currentPage, setCurrentPage, obsessionScore, userCompany }) {
+const navItems = [
+{ id: 'intelligence
+feed'
+_
+, name: 'Intelligence Feed'
+, icon: 'Home'
+, locked: false },
+{ id: 'strategy_
+cohorts'
+, name: 'Strategy Cohorts'
+, icon: 'Target'
+, locked:
+obsessionScore < 3 },
+{ id: 'research
+swarms'
+, name: 'Research Swarms'
+, icon: 'Search'
+, locked:
+_
+obsessionScore < 5 },
+{ id: 'psychographics'
+, name: 'Psychographics'
+, icon: 'Users'
+, locked: obsessionScore
+< 7 },
+{ id: 'brewery'
+, name: 'The Brewery'
+, icon: 'Coffee'
+, locked: obsessionScore < 7 },
+{ id: 'pm
+dashboard'
+, name: 'PM Dashboard'
+_
+, icon: 'ClipboardList'
+, locked:
+obsessionScore < 5 },
+{ id: 'expert
+writers'
+_
+, name: 'Expert Writers'
+, icon: 'PenTool'
+, locked: obsessionScore <
+9 },
+{ id: 'analytics'
+, name: 'Analytics'
+, icon: 'BarChart3'
+, locked: obsessionScore < 5 }
+];
+'#9ca3af');
+useEffect(() => {
+// Create icon elements
+navItems.forEach(item => {
+const iconEl = document.getElementById(`icon-${item.id}`);
+if (iconEl && window.lucide) {
+const IconComponent = window.lucide[item.icon];
+if (IconComponent) {
+iconEl.innerHTML = '';
+const icon = new IconComponent();
+icon.color = item.locked ? '#6b7280' : (currentPage === item.id ? '#667eea' :
+icon.size = 20;
+iconEl.appendChild(icon);
+}
+}
+});
+}, [currentPage, obsessionScore]);
+return (
+<div className="fixed left-0 top-0 w-72 h-screen bg-gradient-to-b from-gray-900
+to-gray-800 text-white overflow-y-auto">
+{/* Company Header */}
+<div className="p-6 border-b border-gray-700">
+<div className="bg-gray-800/50 rounded-xl p-4">
+<div className="text-xl font-bold mb-1">
+{userCompany || 'Your Company'}
+</div>
+<div className="text-sm text-gray-400">
+AI-Powered Intelligence Platform
+</div>
+</div>
+</div>
+{/* Obsession Score Widget */}
+transition-all ${
+<div className="p-6">
+<div className="gradient-primary rounded-xl p-4 text-center">
+<div className="text-xs uppercase opacity-90 mb-2">
+Business Obsession
+</div>
+<div className="text-4xl font-bold mb-1">
+{obsessionScore.toFixed(1)}
+</div>
+<div className="text-sm opacity-90">
+{obsessionScore < 3 ? 'Curious' :
+obsessionScore < 5 ? 'Engaged' :
+obsessionScore < 7 ? 'Focused' :
+obsessionScore < 9 ? 'Obsessed' : 'Hyper-Obsessed'}
+</div>
+</div>
+</div>
+{/* Navigation Menu */}
+<nav className="px-4">
+{navItems.map(item => (
+<button
+key={item.id}
+onClick={() => !item.locked && setCurrentPage(item.id)}
+className={`
+w-full flex items-center gap-3 px-4 py-3 mb-2 rounded-lg
+item.locked
+? 'opacity-50 cursor-not-allowed'
+: currentPage === item.id
+? 'bg-gray-700/50 text-purple-400'
+: 'hover:bg-gray-700/30 text-gray-300'
+}`}
+disabled={item.locked}
+>
+<span id={`icon-${item.id}`} className="w-5 h-5"></span>
+<span className="flex-1 text-left">{item.name}</span>
+{item.locked && (
+<span className="text-xs bg-gray-700 px-2 py-1 rounded">
+Score {Math.floor(
+item.id === 'strategy_
+cohorts' ? 3 :
+item.id === 'research
+swarms' ? 5 :
+_
+item.id === 'psychographics' ? 7 :
+item.id === 'brewery' ? 7 :
+item.id === 'expert
+writers' ? 9 : 5
+_
+)}+
+</span>
+)}
+</button>
+))}
+</nav>
+{/* Bottom Section */}
+<div className="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-700">
+<button
+onClick={() => setCurrentPage('settings')}
+className="w-full flex items-center gap-3 px-4 py-3 rounded-lg
+hover:bg-gray-700/30 text-gray-300 transition-all"
+>
+<span className="w-5 h-5">⚙</span>
+<span>Settings</span>
+</button>
+</div>
+</div>
+);
+}
+// Onboarding Component
+function Onboarding({ onComplete }) {
+const [step, setStep] = useState(1);
+const [formData, setFormData] = useState({
+company: ''
+,
+industry: ''
+,
+stage: ''
+,
+challenges: [],
+competitors: [''
+,
+''
+,
+'']
+});
+const [aiResponse, setAiResponse] = useState('');
+const [isProcessing, setIsProcessing] = useState(false);
+const industries = [
+'SaaS'
+'E-commerce'
+,
+,
+'EdTech'
+'Real Estate'
+,
+,
+'Agency'
+'FinTech'
+,
+,
+'Manufacturing'
+'Retail'
+,
+,
+'HealthTech'
+,
+'Other'
+];
+const challenges = [
+'Finding product-market fit'
+,
+'Tracking competitors'
+,
+'Content creation'
+,
+'Lead generation'
+,
+'Customer retention'
+,
+'Market positioning'
+,
+'Pricing strategy'
+,
+'Team scaling'
+];
+const handleNext = () => {
+if (step === 1 && formData.company && formData.industry) {
+setStep(2);
+} else if (step === 2 && formData.stage) {
+setStep(3);
+} else if (step === 3 && formData.challenges.length > 0) {
+setStep(4);
+} else if (step === 4) {
+setStep(5);
+simulateAIConversation();
+}
+};
+const simulateAIConversation = () => {
+setIsProcessing(true);
+const responses = [
+`I see you're building ${formData.company} in the ${formData.industry} space.
+That's fascinating!`
+,
+`Based on your ${formData.stage} stage, tracking competitors will be crucial.
+`
+,
+`I'm analyzing your competitive landscape now...
+`
+,
+`Found ${Math.floor(Math.random() * 5) + 3} key competitors to monitor.
+`
+,
+`Setting up your personalized intelligence feed...
+`
+];
+let index = 0;
+const interval = setInterval(() => {
+if (index < responses.length) {
+setAiResponse(prev => prev + '\n' + responses[index]);
+index++;
+} else {
+clearInterval(interval);
+setTimeout(() => {
+mockData.updateUser({
+company: formData.company,
+industry: formData.industry,
+onboardingComplete: true
+});
+onComplete();
+}, 2000);
+}
+}, 1500);
+};
+return (
+items-center justify-center p-8">
+<div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 flex
+<div className="max-w-2xl w-full bg-white rounded-2xl shadow-2xl p-8
+animate-fade-in">
+{/* Progress Bar */}
+<div className="mb-8">
+<div className="flex justify-between mb-2">
+{[1, 2, 3, 4, 5].map(i => (
+<div
+key={i}
+className={`
+w-8 h-8 rounded-full flex items-center justify-center
+text-sm font-bold ${
+i <= step
+? 'gradient-primary text-white'
+: 'bg-gray-200 text-gray-400'
+Refleqt</h2>
+in 2 minutes.
+</p>
+}`}
+>
+{i}
+</div>
+))}
+</div>
+<div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+<div
+className="h-full gradient-primary transition-all duration-500"
+style={{ width:
+`${(step / 5) * 100}%` }}
+/>
+</div>
+</div>
+{/* Step Content */}
+{step === 1 && (
+<>
+<h2 className="text-3xl font-bold mb-2 gradient-text">Welcome to
+<p className="text-gray-600 mb-6">Let's set up your intelligence platform
+<div className="space-y-4">
+<div>
+<label className="block text-sm font-medium text-gray-700 mb-2">
+Company Name
+</label>
+<input
+type="text"
+className="w-full px-4 py-2 border border-gray-300 rounded-lg
+focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+placeholder="Enter your company name"
+value={formData.company}
+onChange={(e) => setFormData({...formData, company:
+e.target.value})}
+/>
+</div>
+<div>
+<label className="block text-sm font-medium text-gray-700 mb-2">
+Industry
+</label>
+<select
+className="w-full px-4 py-2 border border-gray-300 rounded-lg
+focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+value={formData.industry}
+onChange={(e) => setFormData({...formData, industry:
+e.target.value})}
+>
+<option value="">Select your industry</option>
+{industries.map(ind => (
+<option key={ind} value={ind}>{ind}</option>
+))}
+</select>
+</div>
+</div>
+</>
+)}
+Stage</h2>
+level.
+</p>
+{step === 2 && (
+<>
+<h2 className="text-3xl font-bold mb-2 gradient-text">Business
+<p className="text-gray-600 mb-6">This helps us calibrate your obsession
+<div className="grid grid-cols-1 gap-4">
+'Enterprise'].map(stage => (
+{['Pre-launch'
+,
+'Just launched'
+,
+'Growing'
+,
+'Scaling'
+,
+<button
+key={stage}
+onClick={() => setFormData({...formData, stage})}
+className={`
+p-4 rounded-lg border-2 transition-all ${
+formData.stage === stage
+? 'border-purple-500 bg-purple-50'
+: 'border-gray-200 hover:border-purple-300'
+}`}
+>
+<div className="font-semibold">{stage}</div>
+<div className="text-sm text-gray-500 mt-1">
+{stage === 'Pre-launch' && 'Building MVP, validating idea'}
+{stage === 'Just launched' && 'First customers, finding PMF'}
+{stage === 'Growing' && '$10K-100K MRR, team <10'}
+{stage === 'Scaling' && '$100K-1M MRR, team 10-50'}
+{stage === 'Enterprise' && '$1M+ MRR, team 50+'}
+</div>
+</button>
+))}
+</div>
+</>
+)}
+Challenges</h2>
+night.
+</p>
+{step === 3 && (
+<>
+<h2 className="text-3xl font-bold mb-2 gradient-text">Current
+<p className="text-gray-600 mb-6">Select all that keep you up at
+<div className="grid grid-cols-2 gap-3">
+{challenges.map(challenge => (
+<label
+key={challenge}
+className={`
+p-3 rounded-lg border-2 cursor-pointer transition-all ${
+formData.challenges.includes(challenge)
+? 'border-purple-500 bg-purple-50'
+: 'border-gray-200 hover:border-purple-300'
+>
+}`}
+<input
+type="checkbox"
+className="mr-2"
+checked={formData.challenges.includes(challenge)}
+onChange={(e) => {
+if (e.target.checked) {
+setFormData({
+...formData,
+challenges: [...formData.challenges, challenge]
+});
+} else {
+setFormData({
+...formData,
+challenges: formData.challenges.filter(c => c !==
+challenge)
+});
+}
+}}
+/>
+{challenge}
+</label>
+))}
+</div>
+</>
+)}
+Tracking</h2>
+(Optional)</p>
+{step === 4 && (
+<>
+<h2 className="text-3xl font-bold mb-2 gradient-text">Competitor
+<p className="text-gray-600 mb-6">Who are your top 3 competitors?
+<div className="space-y-3">
+{[0, 1, 2].map(index => (
+<input
+key={index}
+type="text"
+className="w-full px-4 py-2 border border-gray-300 rounded-lg
+focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+placeholder={`Competitor ${index + 1} name or website
+`}
+value={formData.competitors[index]}
+onChange={(e) => {
+const newCompetitors = [...formData.competitors];
+newCompetitors[index] = e.target.value;
+setFormData({...formData, competitors: newCompetitors});
+}}
+/>
+))}
+</div>
+</>
+)}
+{step === 5 && (
+<>
+<h2 className="text-3xl font-bold mb-2 gradient-text">
+{isProcessing ? 'Analyzing Your Business...
+' : 'Ready to Launch!'}
+</h2>
+<div className="bg-gray-50 rounded-lg p-4 min-h-[200px] font-mono
+text-sm">
+{aiResponse.split('\n').map((line, i) => (
+<div key={i} className="mb-2 animate-fade-in">
+{line && (
+<>
+<span className="text-purple-600">AI: </span>
+{line}
+</>
+)}
+</div>
+))}
+{isProcessing && (
+<span className="animate-pulse">▊</span>
+)}
+</div>
+</>
+)}
+{/* Navigation Buttons */}
+<div className="flex justify-between mt-8">
+{step > 1 && step < 5 && (
+<button
+onClick={() => setStep(step - 1)}
+className="px-6 py-2 border border-gray-300 rounded-lg
+hover:bg-gray-50 transition-all"
+>
+Back
+</button>
+)}
+{step < 5 && (
+<button
+onClick={handleNext}
+className="ml-auto px-6 py-2 gradient-primary text-white rounded-lg
+hover:opacity-90 transition-all"
+>
+Next
+</button>
+)}
+</div>
+</div>
+</div>
+);
+}
+// Intelligence Feed Component
+function IntelligenceFeed({ obsessionScore, updateObsessionScore }) {
+const [insights, setInsights] = useState(mockData.getInsights());
+const [filter, setFilter] = useState('all');
+useEffect(() => {
+// Simulate new insights arriving
+const interval = setInterval(() => {
+const types = ['competitor'
+'market'
+,
+,
+const priorities = ['high'
+'medium'
+,
+,
+'low'];
+'opportunity'];
+const newInsight = {
+id: 'ins
+_
+' + Date.now(),
+type: types[Math.floor(Math.random() * types.length)],
+priority: priorities[Math.floor(Math.random() * priorities.length)],
+title:
+`New ${types[Math.floor(Math.random() * types.length)]} insight`
+content: 'AI-generated insight based on real-time market analysis...
+'
+,
+timestamp: new Date().toISOString(),
+actionable: Math.random() > 0.3
+,
+};
+setInsights(prev => {
+const updated = [newInsight, ...prev].slice(0, 10); // Finite introspect
+return updated;
+});
+}, 30000); // Every 30 seconds
+return () => clearInterval(interval);
+}, []);
+const filteredInsights = insights.filter(insight =>
+filter === 'all' || insight.type === filter
+);
+const handleInsightClick = () => {
+// Increase obsession score when engaging with content
+updateObsessionScore(0.1);
+};
+return (
+<div className="p-8">
+<div className="mb-8">
+<h1 className="text-4xl font-bold mb-2 gradient-text">Intelligence Feed</h1>
+<p className="text-gray-600">
+Your finite intelligence feed - maximum 10 insights, zero overwhelm.
+</p>
+</div>
+{/* Filters */}
+<div className="flex gap-4 mb-6">
+{['all'
+,
+'competitor'
+'market'
+,
+,
+'opportunity'].map(type => (
+<button
+key={type}
+onClick={() => setFilter(type)}
+className={`
+px-4 py-2 rounded-lg transition-all ${
+filter === type
+? 'gradient-primary text-white'
+: 'bg-gray-100 hover:bg-gray-200'
+}`}
+>
+</button>
+{type.charAt(0).toUpperCase() + type.slice(1)}
+))}
+</div>
+{/* Insights Grid */}
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+{filteredInsights.map((insight, index) => (
+<div
+key={insight.id}
+className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl
+transition-all cursor-pointer animate-fade-in"
+style={{ animationDelay:
+`${index * 0.1}s
+` }}
+onClick={handleInsightClick}
+>
+<div className="flex justify-between items-start mb-4">
+<span className={`
+px-3 py-1 rounded-full text-xs font-semibold ${
+insight.type === 'competitor' ? 'bg-red-100 text-red-600' :
+insight.type === 'market' ? 'bg-blue-100 text-blue-600' :
+'bg-green-100 text-green-600'
+}`}>
+{insight.type}
+</span>
+<div className="flex gap-1">
+{[...Array(3)].map((_, i) => (
+<div
+key={i}
+className={`
+w-2 h-2 rounded-full ${
+insight.priority === 'high' ||
+(insight.priority === 'medium' && i < 2) ||
+(insight.priority === 'low' && i < 1)
+? 'bg-purple-500'
+: 'bg-gray-300'
+}`}
+hover:text-purple-700">
+/>
+))}
+</div>
+</div>
+<h3 className="font-bold text-lg mb-2">{insight.title}</h3>
+<p className="text-gray-600 text-sm mb-4">{insight.content}</p>
+<div className="flex justify-between items-center">
+<span className="text-xs text-gray-400">
+{new Date(insight.timestamp).toLocaleTimeString()}
+</span>
+{insight.actionable && (
+<button className="text-purple-600 text-sm font-semibold
+Take Action →
+</button>
+)}
+</div>
+</div>
+))}
+</div>
+{/* Empty State */}
+{filteredInsights.length === 0 && (
+<div className="text-center py-12">
+<div className="text-6xl mb-4">🔍</div>
+<h3 className="text-xl font-semibold mb-2">No insights yet</h3>
+<p className="text-gray-600">Research swarms are gathering
+intelligence...
+</p>
+</div>
+)}
+</div>
+);
+}
+// Strategy Cohorts Component
+function StrategyCohorts({ updateObsessionScore }) {
+const [query, setQuery] = useState('');
+const [isProcessing, setIsProcessing] = useState(false);
+const [result, setResult] = useState(null);
+const [timeRemaining, setTimeRemaining] = useState(0);
+const presetScenarios = [
+'What if a competitor reduces pricing by 30%?'
+,
+'How would AI automation affect our business model?'
+,
+'What if regulation changes in our industry?'
+,
+'How to respond to a new market entrant?'
+];
+const executeStrategyCohortt = () => {
+if (!query) return;
+setIsProcessing(true);
+setTimeRemaining(120); // 2 minutes
+updateObsessionScore(0.3); // Boost score for using advanced feature
+// Countdown timer
+const timer = setInterval(() => {
+setTimeRemaining(prev => {
+if (prev <= 1) {
+clearInterval(timer);
+generateResults();
+return 0;
+}
+return prev - 1;
+});
+}, 1000);
+};
+const generateResults = () => {
+setIsProcessing(false);
+setResult({
+query,
+insights: [
+'Immediate response: Focus on value differentiation rather than price matching'
+,
+'Competitor analysis: Their unit economics suggest this is unsustainable'
+,
+'Customer impact: 23% of base is price-sensitive, 77% value quality'
+,
+'Recommended action: Launch premium tier with exclusive features'
+,
+'Risk assessment: Low - competitor likely to revert pricing within 90 days'
+],
+confidence: 87,
+sources: 12
+});
+};
+return (
+<div className="p-8">
+<div className="mb-8">
+<h1 className="text-4xl font-bold mb-2 gradient-text">Strategy Cohorts</h1>
+<p className="text-gray-600">
+Get AI-synthesized competitive scenarios in 2 minutes.
+</p>
+</div>
+{/* Input Section */}
+<div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+<label className="block text-sm font-medium text-gray-700 mb-2">
+Enter your strategic question
+</label>
+<textarea
+className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2
+focus:ring-purple-500 focus:border-transparent"
+rows="3"
+placeholder="e.g., What if our main competitor launches a freemium model?"
+value={query}
+onChange={(e) => setQuery(e.target.value)}
+disabled={isProcessing}
+/>
+{/* Preset Scenarios */}
+<div className="mt-4">
+<p className="text-sm text-gray-600 mb-2">Or try a preset scenario:</p>
+<div className="flex flex-wrap gap-2">
+{presetScenarios.map((scenario, index) => (
+<button
+key={index}
+onClick={() => setQuery(scenario)}
+className="px-3 py-1 bg-gray-100 rounded-full text-sm
+hover:bg-gray-200 transition-all"
+disabled={isProcessing}
+>
+{scenario}
+</button>
+))}
+</div>
+</div>
+<button
+onClick={executeStrategyCohortt}
+disabled={!query || isProcessing}
+className="mt-4 px-6 py-3 gradient-primary text-white rounded-lg
+hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+>
+{isProcessing ? `Processing... ${timeRemaining}s
+`
+: 'Execute Strategy Cohort'}
+</button>
+</div>
+{/* Processing Animation */}
+{isProcessing && (
+<div className="bg-white rounded-xl shadow-lg p-8 mb-6">
+<div className="text-center">
+<div className="inline-flex items-center justify-center w-20 h-20
+rounded-full bg-purple-100 mb-4 animate-pulse">
+<span className="text-3xl">🔄</span>
+</div>
+<h3 className="text-xl font-semibold mb-2">Analyzing Scenario...
+</h3>
+<p className="text-gray-600 mb-4">
+Research swarms are gathering competitive intelligence
+</p>
+<div className="max-w-md mx-auto">
+<div className="bg-gray-200 rounded-full h-3 overflow-hidden">
+<div
+className="h-full gradient-primary transition-all duration-1000"
+style={{ width:
+`${((120 - timeRemaining) / 120) * 100}%` }}
+/>
+</div>
+60).toString().padStart(2,
+</div>
+<p className="text-sm text-gray-500 mt-2">
+Time remaining: {Math.floor(timeRemaining / 60)}:{(timeRemaining %
+'0')}
+</p>
+</div>
+</div>
+)}
+{/* Results */}
+{result && !isProcessing && (
+<div className="bg-white rounded-xl shadow-lg p-6">
+<div className="mb-6">
+<h3 className="text-xl font-bold mb-2">Strategic Analysis Complete</h3>
+<p className="text-gray-600">Query: "{result.query}"</p>
+</div>
+<div className="grid grid-cols-3 gap-4 mb-6">
+<div className="text-center p-4 bg-purple-50 rounded-lg">
+<div className="text-2xl font-bold
+text-purple-600">{result.confidence}%</div>
+<div className="text-sm text-gray-600">Confidence</div>
+</div>
+<div className="text-center p-4 bg-blue-50 rounded-lg">
+<div className="text-2xl font-bold text-blue-600">{result.sources}</div>
+<div className="text-sm text-gray-600">Sources Analyzed</div>
+</div>
+<div className="text-center p-4 bg-green-50 rounded-lg">
+<div className="text-2xl font-bold text-green-600">2 min</div>
+<div className="text-sm text-gray-600">Analysis Time</div>
+</div>
+</div>
+<div className="space-y-3">
+<h4 className="font-semibold">Key Insights:</h4>
+{result.insights.map((insight, index) => (
+<div key={index} className="flex items-start gap-3 p-3 bg-gray-50
+rounded-lg">
+<span className="flex-shrink-0 w-6 h-6 bg-purple-600 text-white
+rounded-full flex items-center justify-center text-sm">
+{index + 1}
+</span>
+<p className="text-gray-700">{insight}</p>
+</div>
+))}
+</div>
+<div className="mt-6 flex gap-3">
+<button className="px-4 py-2 gradient-primary text-white rounded-lg
+hover:opacity-90 transition-all">
+Generate Report
+</button>
+<button className="px-4 py-2 border border-gray-300 rounded-lg
+hover:bg-gray-50 transition-all">
+Run Another Scenario
+</button>
+</div>
+</div>
+)}
+</div>
+);
+}
+// Coming Soon Component
+function ComingSoon({ feature }) {
+return (
+<div className="p-8">
+<div className="max-w-2xl mx-auto text-center py-16">
+<div className="text-6xl mb-6">🚀</div>
+<h2 className="text-3xl font-bold mb-4 gradient-text">{feature} Coming
+Soon</h2>
+features.
+<p className="text-gray-600 mb-6">
+This feature is locked. Increase your obsession score to unlock advanced
+</p>
+<div className="bg-white rounded-xl shadow-lg p-6 inline-block">
+<p className="text-sm text-gray-600 mb-2">Required Obsession Score:</p>
+<div className="text-3xl font-bold gradient-text">
+{feature === 'Research Swarms' ? '5.0' :
+feature === 'Psychographics' ? '7.0' :
+feature === 'The Brewery' ? '7.0' :
+feature === 'Expert Writers' ? '9.0' : '5.0'}
+</div>
+</div>
+</div>
+</div>
+);
+}
+// Main App Component
+function App() {
+const [currentPage, setCurrentPage] = useState('onboarding');
+const [obsessionScore, setObsessionScore] =
+useState(mockData.getUser().obsessionScore);
+const [userCompany, setUserCompany] = useState(mockData.getUser().company);
+useEffect(() => {
+const user = mockData.getUser();
+if (user.onboardingComplete && currentPage === 'onboarding') {
+setCurrentPage('intelligence
+_
+feed');
+}
+}, []);
+setUserCompany(user.company);
+const updateObsessionScore = (delta) => {
+const newScore = mockData.updateObsessionScore(delta);
+setObsessionScore(newScore);
+// Show notification when features unlock
+if (newScore >= 3 && newScore - delta < 3) {
+alert('🎉 Strategy Cohorts unlocked!');
+}
+if (newScore >= 5 && newScore - delta < 5) {
+alert('🎉 Research Swarms unlocked!');
+}
+if (newScore >= 7 && newScore - delta < 7) {
+alert('🎉 Psychographics & The Brewery unlocked!');
+}
+if (newScore >= 9 && newScore - delta < 9) {
+alert('🎉 Expert Writers unlocked! You are now Hyper-Obsessed!');
+}
+};
+const handleOnboardingComplete = () => {
+setCurrentPage('intelligence
+_
+feed');
+setUserCompany(mockData.getUser().company);
+updateObsessionScore(2); // Boost score after onboarding
+};
+// Render onboarding if not complete
+if (currentPage === 'onboarding') {
+return <Onboarding onComplete={handleOnboardingComplete} />;
+}
+return (
+<div className="flex min-h-screen bg-gray-50">
+<Navigation
+currentPage={currentPage}
+setCurrentPage={setCurrentPage}
+obsessionScore={obsessionScore}
+userCompany={userCompany}
+/>
+<div className="ml-72 flex-1">
+{currentPage === 'intelligence
+_
+feed' && (
+<IntelligenceFeed
+obsessionScore={obsessionScore}
+updateObsessionScore={updateObsessionScore}
+/>
+)}
+{currentPage === 'strategy_
+cohorts' && obsessionScore >= 3 && (
+<StrategyCohorts updateObsessionScore={updateObsessionScore} />
+)}
+{currentPage === 'strategy_
+cohorts' && obsessionScore < 3 && (
+<ComingSoon feature="Strategy Cohorts" />
+)}
+{currentPage === 'research
+_
+swarms' && (
+<ComingSoon feature="Research Swarms" />
+)}
+{currentPage === 'psychographics' && (
+<ComingSoon feature="Psychographics" />
+)}
+{currentPage === 'brewery' && (
+<ComingSoon feature="The Brewery" />
+)}
+{currentPage === 'pm
+_
+dashboard' && (
+<ComingSoon feature="PM Dashboard" />
+)}
+{currentPage === 'expert
+_
+writers' && (
+<ComingSoon feature="Expert Writers" />
+)}
+{currentPage === 'analytics' && (
+<ComingSoon feature="Analytics" />
+)}
+{currentPage === 'settings' && (
+<div className="p-8">
+<h1 className="text-3xl font-bold mb-6">Settings</h1>
+<button
+onClick={() => {
+mockData.resetToDefaults();
+setCurrentPage('onboarding');
+setObsessionScore(5);
+}}
+className="px-4 py-2 bg-red-600 text-white rounded-lg
+hover:bg-red-700"
+>
+Reset Demo
+</button>
+</div>
+)}
+</div>
+</div>
+);
+}
+// Render the app
+ReactDOM.render(<App />
+, document.getElementById('root'));
+</script>
+</body>
+</html>
