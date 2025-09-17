@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refleqt - Unified Business Intelligence Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: #0f172a;
+        color: white;
+        overflow: hidden;
+    }
+
+    .app-container {
+        display: flex;
+        height: 100vh;
+        width: 100vw;
+    }
+
+    .sidebar {
+        width: 280px;
+        background: linear-gradient(180deg, #1a1f2e 0%, #0f172a 100%);
+        border-right: 1px solid #334155;
+        display: flex;
+        flex-direction: column;
+        z-index: 1000;
+    }
+
+    .logo-section {
+        padding: 24px 20px;
+        border-bottom: 1px solid #334155;
+        text-align: center;
+    }
+
+    .logo {
+        font-size: 28px;
+        font-weight: bold;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 8px;
+    }
+
+    .tagline {
+        font-size: 14px;
+        color: #94a3b8;
+        opacity: 0.8;
+    }
+
+    .nav-section {
+        flex: 1;
+        padding: 20px 0;
+    }
+
+    .nav-group {
+        margin-bottom: 32px;
+    }
+
+    .nav-group-title {
+        font-size: 12px;
+        color: #64748b;
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-bottom: 12px;
+        padding: 0 20px;
+        letter-spacing: 0.5px;
+    }
+
+    .nav-btn {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 20px;
+        color: #cbd5e1;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        background: none;
+        width: 100%;
+        text-align: left;
+        font-size: 15px;
+        position: relative;
+    }
+
+    .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+        transform: translateX(4px);
+    }
+
+    .nav-btn.active {
+        background: rgba(102, 126, 234, 0.15);
+        color: #667eea;
+        border-right: 3px solid #667eea;
+    }
+
+    .nav-btn.active::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: #667eea;
+    }
+
+    .nav-icon {
+        font-size: 18px;
+        width: 20px;
+        text-align: center;
+    }
+
+    .nav-badge {
+        background: #ef4444;
+        color: white;
+        font-size: 10px;
+        padding: 2px 6px;
+        border-radius: 10px;
+        margin-left: auto;
+    }
+
+    .nav-badge.new {
+        background: #10b981;
+    }
+
+    .content {
+        flex: 1;
+        position: relative;
+        background: #f8fafc;
+    }
+
+    .content-frame {
+        width: 100%;
+        height: 100%;
+        border: none;
+        background: white;
+    }
+
+    .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(248, 250, 252, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .loading-overlay.show {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid #e2e8f0;
+        border-top: 3px solid #667eea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .status-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 30px;
+        background: #1e293b;
+        border-top: 1px solid #334155;
+        display: flex;
+        align-items: center;
+        padding: 0 16px;
+        font-size: 12px;
+        color: #94a3b8;
+        z-index: 200;
+    }
+
+    .status-indicator {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-right: 20px;
+    }
+
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #10b981;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    .user-section {
+        padding: 20px;
+        border-top: 1px solid #334155;
+    }
+
+    .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .user-profile:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .user-avatar {
+        width: 36px;
+        height: 36px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: white;
+    }
+
+    .user-info {
+        flex: 1;
+    }
+
+    .user-name {
+        font-weight: 600;
+        font-size: 14px;
+        color: white;
+    }
+
+    .user-role {
+        font-size: 12px;
+        color: #94a3b8;
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+        .sidebar {
+            position: fixed;
+            left: -280px;
+            top: 0;
+            height: 100vh;
+            transition: left 0.3s ease;
+            z-index: 2000;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .mobile-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1500;
+            background: #1a1f2e;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .content {
+            width: 100%;
+        }
+    }
+
+    /* Intro Animation */
+    .app-container {
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Notification Toast */
+    .toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #10b981;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        z-index: 3000;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+    }
+
+    .toast.show {
+        transform: translateX(0);
+    }
+</style>
+```
+
+</head>
+<body>
+    <!-- Mobile toggle button -->
+    <button class="mobile-toggle" onclick="toggleSidebar()" style="display: none;">☰</button>
+
+```
+<div class="app-container">
+    <nav class="sidebar" id="sidebar">
+        <!-- Logo Section -->
+        <div class="logo-section">
+            <div class="logo">Refleqt</div>
+            <div class="tagline">Business Intelligence Platform</div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-section">
+            <!-- Getting Started -->
+            <div class="nav-group">
+                <div class="nav-group-title">Getting Started</div>
+                <button class="nav-btn active" onclick="loadPage('landing')" data-page="landing">
+                    <span class="nav-icon">🏠</span>
+                    <span>Landing Page</span>
+                </button>
+                <button class="nav-btn" onclick="loadPage('onboarding')" data-page="onboarding">
+                    <span class="nav-icon">🚀</span>
+                    <span>Onboarding</span>
+                </button>
+            </div>
+
+            <!-- Core Products -->
+            <div class="nav-group">
+                <div class="nav-group-title">Intelligence Platform</div>
+                <button class="nav-btn" onclick="loadPage('intelligence-feed')" data-page="intelligence-feed">
+                    <span class="nav-icon">📊</span>
+                    <span>Intelligence Feed</span>
+                    <span class="nav-badge">Live</span>
+                </button>
+                <button class="nav-btn" onclick="loadPage('research-swarms')" data-page="research-swarms">
+                    <span class="nav-icon">🔬</span>
+                    <span>Research Swarms</span>
+                </button>
+                <button class="nav-btn" onclick="loadPage('strategy-cohorts')" data-page="strategy-cohorts">
+                    <span class="nav-icon">🎯</span>
+                    <span>Strategy Cohorts</span>
+                </button>
+                <button class="nav-btn" onclick="loadPage('psychographics')" data-page="psychographics">
+                    <span class="nav-icon">🧠</span>
+                    <span>Psychographics</span>
+                </button>
+                <button class="nav-btn" onclick="loadPage('brewery')" data-page="brewery">
+                    <span class="nav-icon">🍺</span>
+                    <span>The Brewery</span>
+                    <span class="nav-badge new">New</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- User Section -->
+        <div class="user-section">
+            <div class="user-profile">
+                <div class="user-avatar">A</div>
+                <div class="user-info">
+                    <div class="user-name">Alex (Demo User)</div>
+                    <div class="user-role">TaskFlow SaaS Founder</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content">
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loading">
+            <div class="loading-spinner"></div>
+        </div>
+
+        <!-- Main Content Frame -->
+        <iframe 
+            id="content-frame" 
+            class="content-frame" 
+            src="pages/landing.html"
+            onload="hideLoading()"
+        ></iframe>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span>Prototype Mode</span>
+            </div>
+            <div class="status-indicator">
+                <span id="current-page">Landing Page</span>
+            </div>
+            <div class="status-indicator" style="margin-left: auto;">
+                <span>Last Updated: Dec 2024</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast"></div>
+
+<script>
+    // Page navigation
+    function loadPage(page) {
+        showLoading();
+        
+        // Update iframe source
+        const frame = document.getElementById('content-frame');
+        frame.src = `pages/${page}.html`;
+        
+        // Update active navigation
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.querySelector(`[data-page="${page}"]`).classList.add('active');
+        
+        // Update status bar
+        const pageNames = {
+            'landing': 'Landing Page',
+            'onboarding': 'Onboarding Flow',
+            'intelligence-feed': 'Intelligence Feed',
+            'research-swarms': 'Research Swarms',
+            'strategy-cohorts': 'Strategy Cohorts',
+            'psychographics': 'Psychographics',
+            'brewery': 'The Brewery'
+        };
+        
+        document.getElementById('current-page').textContent = pageNames[page] || page;
+        
+        // Show toast notification
+        showToast(`Navigated to ${pageNames[page]}`);
+        
+        // Close mobile sidebar
+        if (window.innerWidth <= 768) {
+            document.getElementById('sidebar').classList.remove('open');
+        }
+    }
+
+    // Loading state management
+    function showLoading() {
+        document.getElementById('loading').classList.add('show');
+    }
+
+    function hideLoading() {
+        document.getElementById('loading').classList.remove('show');
+    }
+
+    // Mobile sidebar toggle
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    // Toast notification
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.classList.add('show');
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+
+    // Handle mobile responsiveness
+    function handleResize() {
+        if (window.innerWidth <= 768) {
+            document.querySelector('.mobile-toggle').style.display = 'block';
+        } else {
+            document.querySelector('.mobile-toggle').style.display = 'none';
+            document.getElementById('sidebar').classList.remove('open');
+        }
+    }
+
+    // Initialize
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('load', () => {
+        handleResize();
+        hideLoading();
+    });
+
+    // Handle iframe errors
+    document.getElementById('content-frame').addEventListener('error', function() {
+        console.log('Error loading page');
+        hideLoading();
+        showToast('Error loading page - check if file exists');
+    });
+
+    // Listen for messages from iframe (for advanced integration)
+    window.addEventListener('message', function(event) {
+        if (event.data.type === 'navigation') {
+            loadPage(event.data.page);
+        }
+    });
+</script>
+```
+
+</body>
+</html>
