@@ -1068,5 +1068,21 @@
         // Render the app
         ReactDOM.render(<App />, document.getElementById('root'));
     </script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const buttons = document.querySelectorAll('button, .btn, .cta-button, [class*="btn"]');
+    buttons.forEach(button => {
+        const text = button.textContent.toLowerCase();
+        if (text.includes('sign') || text.includes('start') || text.includes('demo') || text.includes('try')) {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (window.parent) {
+                    window.parent.postMessage({ type: 'start-demo' }, '*');
+                }
+            });
+        }
+    });
+});
+</script>
 </body>
 </html>
