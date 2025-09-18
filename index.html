@@ -518,11 +518,32 @@
     });
 
     // Listen for messages from iframe (for advanced integration)
-    window.addEventListener('message', function(event) {
-        if (event.data.type === 'navigation') {
-            loadPage(event.data.page);
-        }
-    });
+window.addEventListener('message', function(event) {
+    // Handle navigation from landing page signup
+    if (event.data.type === 'start-demo') {
+        showToast('Starting Alex Demo Experience...');
+        setTimeout(() => {
+            loadPage('onboarding');
+        }, 500);
+    }
+    
+    // Handle onboarding completion - go directly to intelligence feed
+    if (event.data.type === 'demo-complete') {
+        showToast('Demo Complete! Welcome to TaskFlow Intelligence Portal');
+        setTimeout(() => {
+            loadPage('intelligence-feed');
+        }, 1000);
+    }
+    
+    // Handle general navigation
+    if (event.data.type === 'navigation') {
+        loadPage(event.data.page);
+    }
+});
+    // Auto-navigate to landing on load
+document.addEventListener('DOMContentLoaded', function() {
+    loadPage('landing');
+});
 </script>
 ```
 
