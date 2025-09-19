@@ -20,84 +20,10 @@
             color: #2d3748;
         }
 
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 280px;
-            height: 100vh;
-            background: linear-gradient(180deg, #1a1f2e 0%, #2d3748 100%);
-            color: white;
-            padding: 20px;
-            overflow-y: auto;
-            z-index: 1000;
-        }
-
-        .company-header {
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            margin-bottom: 30px;
-        }
-
-        .company-name {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 4px;
-        }
-
-        .company-location {
-            font-size: 14px;
-            color: #a0aec0;
-        }
-
-        .obsession-widget {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .obsession-score-large {
-            font-size: 36px;
-            font-weight: bold;
-        }
-
-        .nav-menu {
-            list-style: none;
-        }
-
-        .nav-item {
-            margin-bottom: 8px;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            color: #a0aec0;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-
-        .nav-link.active {
-            background: rgba(102, 126, 234, 0.2);
-            color: #667eea;
-        }
-
-        .nav-icon {
-            width: 20px;
-            text-align: center;
-        }
-
         /* Main Content */
         .main-content {
-            margin-left: 280px;
             padding: 30px;
+            width: 100%;
         }
 
         .psychographics-header {
@@ -339,7 +265,7 @@
 
         .journey-header {
             display: flex;
-            justify-content: between;
+            justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
@@ -736,18 +662,14 @@
         }
 
         @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-            
             .main-content {
-                margin-left: 0;
+                padding: 20px;
             }
-            
+
             .segments-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .journey-stages {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -921,42 +843,38 @@
             });
 
             return (
-                <div>
-                    <Sidebar obsessionScore={obsessionScore} />
-                    
-                    <div className="main-content">
-                        <div className="psychographics-header">
-                            <h1 className="psychographics-title">🧠 Psychographics</h1>
-                            <p className="psychographics-subtitle">
-                                Deep user behavioral analysis and segmentation for conversion optimization
-                            </p>
-                        </div>
+                <div className="main-content">
+                    <div className="psychographics-header">
+                        <h1 className="psychographics-title">🧠 Psychographics</h1>
+                        <p className="psychographics-subtitle">
+                            Deep user behavioral analysis and segmentation for conversion optimization
+                        </p>
+                    </div>
 
-                        <div className="psychographics-layout">
-                            <div>
-                                <SegmentsOverview
-                                    segments={filteredSegments}
-                                    segmentFilter={segmentFilter}
-                                    setSegmentFilter={setSegmentFilter}
-                                    onViewDetails={viewSegmentDetails}
-                                />
+                    <div className="psychographics-layout">
+                        <div>
+                            <SegmentsOverview
+                                segments={filteredSegments}
+                                segmentFilter={segmentFilter}
+                                setSegmentFilter={setSegmentFilter}
+                                onViewDetails={viewSegmentDetails}
+                            />
 
-                                <JourneyMapping
-                                    activeSegment={activeSegment}
-                                    setActiveSegment={setActiveSegment}
-                                    activeJourneyStage={activeJourneyStage}
-                                    setActiveJourneyStage={setActiveJourneyStage}
-                                    journeyStages={journeyStages}
-                                    userSegments={userSegments}
-                                    getStageDetails={getStageDetails}
-                                />
-                            </div>
-
-                            <PsychographicControlPanel 
-                                userSegments={userSegments}
+                            <JourneyMapping
                                 activeSegment={activeSegment}
+                                setActiveSegment={setActiveSegment}
+                                activeJourneyStage={activeJourneyStage}
+                                setActiveJourneyStage={setActiveJourneyStage}
+                                journeyStages={journeyStages}
+                                userSegments={userSegments}
+                                getStageDetails={getStageDetails}
                             />
                         </div>
+
+                        <PsychographicControlPanel 
+                            userSegments={userSegments}
+                            activeSegment={activeSegment}
+                        />
                     </div>
 
                     <SegmentDetailsModal
@@ -964,43 +882,6 @@
                         onClose={() => setShowModal(false)}
                         content={modalContent}
                     />
-                </div>
-            );
-        }
-
-        // Sidebar Component
-        function Sidebar({ obsessionScore }) {
-            const navItems = [
-                { id: 'intelligence', icon: '🏠', name: 'Intelligence Feed', active: false },
-                { id: 'swarms', icon: '🔬', name: 'Research Swarms', active: false },
-                { id: 'cohorts', icon: '🎯', name: 'Strategy Cohorts', active: false },
-                { id: 'psychographics', icon: '🧠', name: 'Psychographics', active: true },
-                { id: 'brewery', icon: '🍺', name: 'The Brewery', active: false }
-            ];
-
-            return (
-                <div className="sidebar">
-                    <div className="company-header">
-                        <div className="company-name">TaskFlow</div>
-                        <div className="company-location">🚀 Project Management SaaS</div>
-                    </div>
-
-                    <div className="obsession-widget">
-                        <div style={{fontSize: '12px', opacity: 0.9, marginBottom: '8px'}}>Business Obsession</div>
-                        <div className="obsession-score-large">{obsessionScore.toFixed(1)}</div>
-                        <div style={{fontSize: '14px', opacity: 0.9, marginTop: '4px'}}>Hyper-Obsessed</div>
-                    </div>
-
-                    <ul className="nav-menu">
-                        {navItems.map(item => (
-                            <li key={item.id} className="nav-item">
-                                <a href="#" className={`nav-link ${item.active ? 'active' : ''}`}>
-                                    <span className="nav-icon">{item.icon}</span>
-                                    <span>{item.name}</span>
-                                </a>
-                            </li>
-                        ))}
-                    </ul>
                 </div>
             );
         }
@@ -1235,7 +1116,6 @@
 
             return (
                 <div className="psychographic-control-panel">
-                    {/* Segment Analytics */}
                     <div className="segment-analytics">
                         <h3 className="analytics-title">📊 Conversion Analytics</h3>
                         
@@ -1255,7 +1135,6 @@
                         </div>
                     </div>
 
-                    {/* Behavior Patterns */}
                     <div className="behavior-patterns">
                         <h3 className="analytics-title">🔍 Behavior Patterns</h3>
                         {behaviorPatterns.map((pattern, index) => (
@@ -1266,7 +1145,6 @@
                         ))}
                     </div>
 
-                    {/* Segment Insights */}
                     <div className="segment-insights">
                         <h3 className="analytics-title">💡 Actionable Insights</h3>
                         {segmentInsights.map((insight, index) => (
@@ -1376,7 +1254,6 @@
                         </div>
 
                         <div className="segment-analysis">
-                            {/* Segment Overview */}
                             <div className="analysis-section">
                                 <h3>📊 Segment Overview</h3>
                                 <div style={{display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '16px'}}>
@@ -1399,7 +1276,6 @@
                                 </div>
                             </div>
 
-                            {/* User Personas */}
                             <div className="analysis-section">
                                 <h3>👤 Representative Persona</h3>
                                 {personas.map((persona, index) => (
@@ -1433,7 +1309,6 @@
                                 ))}
                             </div>
 
-                            {/* Behavioral Insights */}
                             <div className="analysis-section">
                                 <h3>🔍 Behavioral Analysis</h3>
                                 <div style={{display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px'}}>
@@ -1456,7 +1331,6 @@
                                 </div>
                             </div>
 
-                            {/* Messaging Strategies */}
                             <div className="analysis-section">
                                 <h3>💬 Messaging Strategies</h3>
                                 <div className="messaging-strategies">
@@ -1470,7 +1344,6 @@
                                 </div>
                             </div>
 
-                            {/* Conversion Recommendations */}
                             <div className="analysis-section">
                                 <h3>🎯 Conversion Optimization</h3>
                                 <div style={{background: 'white', borderRadius: '8px', padding: '16px'}}>
