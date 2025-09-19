@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Refleqt - Unified Business Intelligence Platform</title>
+    <title>Refleqt - TaskFlow Intelligence Portal</title>
     <style>
         * {
             margin: 0;
@@ -12,540 +11,699 @@
             box-sizing: border-box;
         }
 
-```
-    body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        background: #0f172a;
-        color: white;
-        overflow: hidden;
-    }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #2d3748;
+            background: #f7fafc;
+            overflow-x: hidden;
+        }
 
-    .app-container {
-        display: flex;
-        height: 100vh;
-        width: 100vw;
-    }
-
-    .sidebar {
-        width: 280px;
-        background: linear-gradient(180deg, #1a1f2e 0%, #0f172a 100%);
-        border-right: 1px solid #334155;
-        display: flex;
-        flex-direction: column;
-        z-index: 1000;
-    }
-
-    .logo-section {
-        padding: 24px 20px;
-        border-bottom: 1px solid #334155;
-        text-align: center;
-    }
-
-    .logo {
-        font-size: 28px;
-        font-weight: bold;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin-bottom: 8px;
-    }
-
-    .tagline {
-        font-size: 14px;
-        color: #94a3b8;
-        opacity: 0.8;
-    }
-
-    .nav-section {
-        flex: 1;
-        padding: 20px 0;
-    }
-
-    .nav-group {
-        margin-bottom: 32px;
-    }
-
-    .nav-group-title {
-        font-size: 12px;
-        color: #64748b;
-        text-transform: uppercase;
-        font-weight: 600;
-        margin-bottom: 12px;
-        padding: 0 20px;
-        letter-spacing: 0.5px;
-    }
-
-    .nav-btn {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px 20px;
-        color: #cbd5e1;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        border: none;
-        background: none;
-        width: 100%;
-        text-align: left;
-        font-size: 15px;
-        position: relative;
-    }
-
-    .nav-btn:hover {
-        background: rgba(255, 255, 255, 0.05);
-        color: white;
-        transform: translateX(4px);
-    }
-
-    .nav-btn.active {
-        background: rgba(102, 126, 234, 0.15);
-        color: #667eea;
-        border-right: 3px solid #667eea;
-    }
-
-    .nav-btn.active::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 3px;
-        background: #667eea;
-    }
-
-    .nav-icon {
-        font-size: 18px;
-        width: 20px;
-        text-align: center;
-    }
-
-    .nav-badge {
-        background: #ef4444;
-        color: white;
-        font-size: 10px;
-        padding: 2px 6px;
-        border-radius: 10px;
-        margin-left: auto;
-    }
-
-    .nav-badge.new {
-        background: #10b981;
-    }
-
-    .content {
-        flex: 1;
-        position: relative;
-        background: #f8fafc;
-    }
-
-    .content-frame {
-        width: 100%;
-        height: 100%;
-        border: none;
-        background: white;
-    }
-
-    .loading-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(248, 250, 252, 0.9);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 100;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
-    }
-
-    .loading-overlay.show {
-        opacity: 1;
-        visibility: visible;
-    }
-
-    .loading-spinner {
-        width: 40px;
-        height: 40px;
-        border: 3px solid #e2e8f0;
-        border-top: 3px solid #667eea;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-
-    .status-bar {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 30px;
-        background: #1e293b;
-        border-top: 1px solid #334155;
-        display: flex;
-        align-items: center;
-        padding: 0 16px;
-        font-size: 12px;
-        color: #94a3b8;
-        z-index: 200;
-    }
-
-    .status-indicator {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-right: 20px;
-    }
-
-    .status-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: #10b981;
-        animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.5; }
-    }
-
-    .user-section {
-        padding: 20px;
-        border-top: 1px solid #334155;
-    }
-
-    .user-profile {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .user-profile:hover {
-        background: rgba(255, 255, 255, 0.1);
-    }
-
-    .user-avatar {
-        width: 36px;
-        height: 36px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        color: white;
-    }
-
-    .user-info {
-        flex: 1;
-    }
-
-    .user-name {
-        font-weight: 600;
-        font-size: 14px;
-        color: white;
-    }
-
-    .user-role {
-        font-size: 12px;
-        color: #94a3b8;
-    }
-
-    /* Mobile Responsiveness */
-    @media (max-width: 768px) {
-        .sidebar {
-            position: fixed;
-            left: -280px;
-            top: 0;
+        .app-container {
+            display: flex;
             height: 100vh;
-            transition: left 0.3s ease;
-            z-index: 2000;
         }
 
-        .sidebar.open {
+        /* Sidebar Styles */
+        .sidebar {
+            width: 320px;
+            background: linear-gradient(180deg, #1a202c 0%, #2d3748 100%);
+            color: white;
+            padding: 0;
+            overflow-y: auto;
+            flex-shrink: 0;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+        }
+
+        /* Company Header */
+        .company-header {
+            padding: 30px 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .company-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .company-logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            color: white;
+        }
+
+        .company-details h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .company-tagline {
+            color: #a0aec0;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Business Obsession Score */
+        .obsession-widget {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .obsession-widget::before {
+            content: '';
+            position: absolute;
+            top: 0;
             left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+            pointer-events: none;
         }
 
+        .obsession-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .obsession-score {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .obsession-level {
+            font-size: 16px;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+        /* Navigation */
+        .nav-section {
+            padding: 30px 0;
+        }
+
+        .nav-group {
+            margin-bottom: 40px;
+        }
+
+        .nav-group-title {
+            color: #a0aec0;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            padding: 0 25px;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 25px;
+            background: none;
+            border: none;
+            color: #a0aec0;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: left;
+            position: relative;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
+
+        .nav-btn.active {
+            background: rgba(79, 172, 254, 0.15);
+            color: #4facfe;
+            border-right: 3px solid #4facfe;
+        }
+
+        .nav-btn.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #4facfe;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .nav-badge {
+            background: #ef4444;
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: auto;
+        }
+
+        .nav-badge.new {
+            background: #10b981;
+        }
+
+        .nav-badge.beta {
+            background: #f59e0b;
+        }
+
+        /* User Section */
+        .user-section {
+            margin-top: auto;
+            padding: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .user-role {
+            color: #a0aec0;
+            font-size: 12px;
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Mobile Toggle */
         .mobile-toggle {
+            display: none;
             position: fixed;
             top: 20px;
             left: 20px;
-            z-index: 1500;
-            background: #1a1f2e;
-            color: white;
+            z-index: 1001;
+            background: white;
             border: none;
             padding: 12px;
-            border-radius: 8px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             cursor: pointer;
             font-size: 18px;
         }
 
-        .content {
-            width: 100%;
+        /* Loading Overlay */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
         }
-    }
 
-    /* Intro Animation */
-    .app-container {
-        animation: fadeIn 0.5s ease-out;
-    }
+        .loading-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
 
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #4facfe;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
 
-    /* Notification Toast */
-    .toast {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: #10b981;
-        color: white;
-        padding: 12px 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        z-index: 3000;
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-    }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
-    .toast.show {
-        transform: translateX(0);
-    }
-</style>
-```
+        /* Content Frame */
+        .content-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
 
+        /* Status Bar */
+        .status-bar {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 12px 25px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #1f2937;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-weight: 500;
+            transform: translateY(-100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            max-width: 300px;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px 25px;
+            text-align: center;
+        }
+
+        .welcome-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .welcome-subtitle {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .mobile-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                z-index: 1000;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .content {
+                margin-left: 0;
+            }
+
+            .app-container {
+                flex-direction: column;
+            }
+        }
+
+        /* Sidebar overlay for mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar-overlay.show {
+                display: block;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Mobile toggle button -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
     <button class="mobile-toggle" onclick="toggleSidebar()" style="display: none;">☰</button>
 
-```
-<div class="app-container">
-    <nav class="sidebar" id="sidebar">
-        <!-- Logo Section -->
-        <div class="logo-section">
-            <div class="logo">Refleqt</div>
-            <div class="tagline">Business Intelligence Platform</div>
-        </div>
+    <div class="app-container">
+        <nav class="sidebar" id="sidebar">
+            <!-- Company Header -->
+            <div class="company-header">
+                <div class="company-info">
+                    <div class="company-logo">TF</div>
+                    <div class="company-details">
+                        <h2>TaskFlow</h2>
+                        <div class="company-tagline">
+                            <span>🚀</span>
+                            <span>Project Management SaaS</span>
+                        </div>
+                    </div>
+                </div>
 
-        <!-- Navigation -->
-        <div class="nav-section">
-            <!-- Getting Started -->
-            <div class="nav-group">
-                <div class="nav-group-title">Getting Started</div>
-                <button class="nav-btn active" onclick="loadPage('landing')" data-page="landing">
-                    <span class="nav-icon">🏠</span>
-                    <span>Landing Page</span>
-                </button>
-                <button class="nav-btn" onclick="loadPage('onboarding')" data-page="onboarding">
-                    <span class="nav-icon">🚀</span>
-                    <span>Onboarding</span>
-                </button>
+                <!-- Business Obsession Score -->
+                <div class="obsession-widget">
+                    <div class="obsession-title">Business Obsession</div>
+                    <div class="obsession-score">8.2</div>
+                    <div class="obsession-level">Obsessed</div>
+                </div>
             </div>
 
-            <!-- Core Products -->
-            <div class="nav-group">
-                <div class="nav-group-title">Intelligence Platform</div>
-                <button class="nav-btn" onclick="loadPage('intelligence-feed')" data-page="intelligence-feed">
-                    <span class="nav-icon">📊</span>
-                    <span>Intelligence Feed</span>
-                    <span class="nav-badge">Live</span>
-                </button>
-                <button class="nav-btn" onclick="loadPage('research-swarms')" data-page="research-swarms">
-                    <span class="nav-icon">🔬</span>
-                    <span>Research Swarms</span>
-                </button>
-                <button class="nav-btn" onclick="loadPage('strategy-cohorts')" data-page="strategy-cohorts">
-                    <span class="nav-icon">🎯</span>
-                    <span>Strategy Cohorts</span>
-                </button>
-                <button class="nav-btn" onclick="loadPage('psychographics')" data-page="psychographics">
-                    <span class="nav-icon">🧠</span>
-                    <span>Psychographics</span>
-                </button>
-                <button class="nav-btn" onclick="loadPage('brewery')" data-page="brewery">
-                    <span class="nav-icon">🍺</span>
-                    <span>The Brewery</span>
-                    <span class="nav-badge new">New</span>
-                </button>
-            </div>
-        </div>
+            <!-- Navigation -->
+            <div class="nav-section">
+                <!-- Core Intelligence Platform -->
+                <div class="nav-group">
+                    <div class="nav-group-title">Intelligence Platform</div>
+                    <button class="nav-btn active" onclick="loadPage('intelligence-feed')" data-page="intelligence-feed">
+                        <span class="nav-icon">📊</span>
+                        <span>Intelligence Feed</span>
+                        <span class="nav-badge">Live</span>
+                    </button>
+                    <button class="nav-btn" onclick="loadPage('research-swarms')" data-page="research-swarms">
+                        <span class="nav-icon">🔬</span>
+                        <span>Research Swarms</span>
+                    </button>
+                    <button class="nav-btn" onclick="loadPage('strategy-cohorts')" data-page="strategy-cohorts">
+                        <span class="nav-icon">🎯</span>
+                        <span>Strategy Cohorts</span>
+                    </button>
+                    <button class="nav-btn" onclick="loadPage('psychographics')" data-page="psychographics">
+                        <span class="nav-icon">🧠</span>
+                        <span>Psychographics</span>
+                    </button>
+                </div>
 
-        <!-- User Section -->
-        <div class="user-section">
-            <div class="user-profile">
-                <div class="user-avatar">A</div>
-                <div class="user-info">
-                    <div class="user-name">Alex (Demo User)</div>
-                    <div class="user-role">TaskFlow SaaS Founder</div>
+                <!-- Content & Writing -->
+                <div class="nav-group">
+                    <div class="nav-group-title">Content & Writing</div>
+                    <button class="nav-btn" onclick="loadPage('brewery')" data-page="brewery">
+                        <span class="nav-icon">🍺</span>
+                        <span>The Brewery</span>
+                        <span class="nav-badge new">New</span>
+                    </button>
+                    <button class="nav-btn" onclick="loadPage('expert-writers')" data-page="expert-writers">
+                        <span class="nav-icon">✍️</span>
+                        <span>Expert Writers</span>
+                        <span class="nav-badge beta">Beta</span>
+                    </button>
+                </div>
+
+                <!-- Settings & Support -->
+                <div class="nav-group">
+                    <div class="nav-group-title">Account</div>
+                    <button class="nav-btn" onclick="loadPage('settings')" data-page="settings">
+                        <span class="nav-icon">⚙️</span>
+                        <span>Settings</span>
+                    </button>
+                    <button class="nav-btn" onclick="loadPage('billing')" data-page="billing">
+                        <span class="nav-icon">💳</span>
+                        <span>Billing</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- User Section -->
+            <div class="user-section">
+                <div class="user-profile">
+                    <div class="user-avatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name">Alex Thompson</div>
+                        <div class="user-role">Founder & CEO</div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="content">
+            <!-- Welcome Banner -->
+            <div class="welcome-banner">
+                <div class="welcome-title">Welcome back, Alex! 👋</div>
+                <div class="welcome-subtitle">Your TaskFlow intelligence is ready. Let's obsess smart today.</div>
+            </div>
+
+            <!-- Loading Overlay -->
+            <div class="loading-overlay" id="loading">
+                <div class="loading-spinner"></div>
+            </div>
+
+            <!-- Main Content Frame -->
+            <iframe 
+                id="content-frame" 
+                class="content-frame" 
+                src="pages/intelligence-feed.html"
+                onload="hideLoading()"
+            ></iframe>
+
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <span>Live Intelligence Active</span>
+                </div>
+                <div class="status-indicator">
+                    <span id="current-page">Intelligence Feed</span>
+                </div>
+                <div class="status-indicator" style="margin-left: auto;">
+                    <span>Last Updated: Just now</span>
                 </div>
             </div>
         </div>
-    </nav>
-
-    <div class="content">
-        <!-- Loading Overlay -->
-        <div class="loading-overlay" id="loading">
-            <div class="loading-spinner"></div>
-        </div>
-
-        <!-- Main Content Frame -->
-        <iframe 
-            id="content-frame" 
-            class="content-frame" 
-            src="pages/landing.html"
-            onload="hideLoading()"
-        ></iframe>
-
-        <!-- Status Bar -->
-        <div class="status-bar">
-            <div class="status-indicator">
-                <div class="status-dot"></div>
-                <span>Prototype Mode</span>
-            </div>
-            <div class="status-indicator">
-                <span id="current-page">Landing Page</span>
-            </div>
-            <div class="status-indicator" style="margin-left: auto;">
-                <span>Last Updated: Dec 2024</span>
-            </div>
-        </div>
     </div>
-</div>
 
-<!-- Toast Notification -->
-<div class="toast" id="toast"></div>
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
 
-<script>
-    // Page navigation
-    function loadPage(page) {
-        showLoading();
-        
-        // Update iframe source
-        const frame = document.getElementById('content-frame');
-        frame.src = `pages/${page}.html`;
-        
-        // Update active navigation
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.classList.remove('active');
+    <script>
+        // Page navigation
+        function loadPage(page) {
+            showLoading();
+            
+            // Update iframe source
+            const frame = document.getElementById('content-frame');
+            frame.src = `pages/${page}.html`;
+            
+            // Update active navigation
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            const activeBtn = document.querySelector(`[data-page="${page}"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+            }
+            
+            // Update status bar
+            const pageNames = {
+                'intelligence-feed': 'Intelligence Feed',
+                'research-swarms': 'Research Swarms',
+                'strategy-cohorts': 'Strategy Cohorts',
+                'psychographics': 'Psychographics',
+                'brewery': 'The Brewery',
+                'expert-writers': 'Expert Writers',
+                'settings': 'Settings',
+                'billing': 'Billing'
+            };
+            
+            document.getElementById('current-page').textContent = pageNames[page] || page;
+            
+            // Show toast notification
+            showToast(`Navigated to ${pageNames[page]}`);
+            
+            // Close mobile sidebar
+            closeMobileSidebar();
+        }
+
+        // Loading state management
+        function showLoading() {
+            document.getElementById('loading').classList.add('show');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').classList.remove('show');
+        }
+
+        // Mobile sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        function closeMobileSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            sidebar.classList.remove('open');
+            overlay.classList.remove('show');
+        }
+
+        // Close sidebar when clicking overlay
+        document.getElementById('sidebar-overlay').addEventListener('click', closeMobileSidebar);
+
+        // Toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Handle mobile responsiveness
+        function handleResize() {
+            if (window.innerWidth <= 768) {
+                document.querySelector('.mobile-toggle').style.display = 'block';
+            } else {
+                document.querySelector('.mobile-toggle').style.display = 'none';
+                closeMobileSidebar();
+            }
+        }
+
+        // Initialize
+        window.addEventListener('resize', handleResize);
+        window.addEventListener('load', () => {
+            handleResize();
+            hideLoading();
+            
+            // Welcome message for new portal users
+            setTimeout(() => {
+                showToast('Welcome to your TaskFlow Intelligence Portal!');
+            }, 1000);
         });
-        document.querySelector(`[data-page="${page}"]`).classList.add('active');
-        
-        // Update status bar
-        const pageNames = {
-            'landing': 'Landing Page',
-            'onboarding': 'Onboarding Flow',
-            'intelligence-feed': 'Intelligence Feed',
-            'research-swarms': 'Research Swarms',
-            'strategy-cohorts': 'Strategy Cohorts',
-            'psychographics': 'Psychographics',
-            'brewery': 'The Brewery'
-        };
-        
-        document.getElementById('current-page').textContent = pageNames[page] || page;
-        
-        // Show toast notification
-        showToast(`Navigated to ${pageNames[page]}`);
-        
-        // Close mobile sidebar
-        if (window.innerWidth <= 768) {
-            document.getElementById('sidebar').classList.remove('open');
-        }
-    }
 
-    // Loading state management
-    function showLoading() {
-        document.getElementById('loading').classList.add('show');
-    }
+        // Handle iframe errors
+        document.getElementById('content-frame').addEventListener('error', function() {
+            console.log('Error loading page');
+            hideLoading();
+            showToast('Error loading page - check if file exists');
+        });
 
-    function hideLoading() {
-        document.getElementById('loading').classList.remove('show');
-    }
+        // Listen for messages from iframe (for advanced integration)
+        window.addEventListener('message', function(event) {
+            // Handle any navigation requests from within pages
+            if (event.data.type === 'navigation') {
+                loadPage(event.data.page);
+            }
+            
+            // Handle feature unlock notifications
+            if (event.data.type === 'feature-unlocked') {
+                showToast(`🎉 New feature unlocked: ${event.data.feature}`);
+            }
+        });
 
-    // Mobile sidebar toggle
-    function toggleSidebar() {
-        document.getElementById('sidebar').classList.toggle('open');
-    }
-
-    // Toast notification
-    function showToast(message) {
-        const toast = document.getElementById('toast');
-        toast.textContent = message;
-        toast.classList.add('show');
-        
-        setTimeout(() => {
-            toast.classList.remove('show');
-        }, 3000);
-    }
-
-    // Handle mobile responsiveness
-    function handleResize() {
-        if (window.innerWidth <= 768) {
-            document.querySelector('.mobile-toggle').style.display = 'block';
-        } else {
-            document.querySelector('.mobile-toggle').style.display = 'none';
-            document.getElementById('sidebar').classList.remove('open');
-        }
-    }
-
-    // Initialize
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('load', () => {
-        handleResize();
-        hideLoading();
-    });
-
-    // Handle iframe errors
-    document.getElementById('content-frame').addEventListener('error', function() {
-        console.log('Error loading page');
-        hideLoading();
-        showToast('Error loading page - check if file exists');
-    });
-
-    // Listen for messages from iframe (for advanced integration)
-window.addEventListener('message', function(event) {
-    // Handle navigation from landing page signup
-    if (event.data.type === 'start-demo') {
-        showToast('Starting Alex Demo Experience...');
-        setTimeout(() => {
-            loadPage('onboarding');
-        }, 500);
-    }
-    
-    // Handle onboarding completion - go directly to intelligence feed
-    if (event.data.type === 'demo-complete') {
-        showToast('Demo Complete! Welcome to TaskFlow Intelligence Portal');
-        setTimeout(() => {
+        // Auto-navigate to intelligence feed on load (portal homepage)
+        document.addEventListener('DOMContentLoaded', function() {
             loadPage('intelligence-feed');
-        }, 1000);
-    }
-    
-    // Handle general navigation
-    if (event.data.type === 'navigation') {
-        loadPage(event.data.page);
-    }
-});
-    // Auto-navigate to landing on load
-document.addEventListener('DOMContentLoaded', function() {
-    loadPage('landing');
-});
-</script>
-```
+        });
 
+        // Add some portal-specific initialization
+        window.addEventListener('load', function() {
+            // Check if user came from demo completion
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('demo') === 'complete') {
+                setTimeout(() => {
+                    showToast('🎉 Demo complete! Welcome to your TaskFlow portal');
+                }, 500);
+                
+                // Clean up URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        });
+    </script>
 </body>
 </html>
