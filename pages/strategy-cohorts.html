@@ -20,84 +20,10 @@
             color: #2d3748;
         }
 
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 280px;
-            height: 100vh;
-            background: linear-gradient(180deg, #1a1f2e 0%, #2d3748 100%);
-            color: white;
-            padding: 20px;
-            overflow-y: auto;
-            z-index: 1000;
-        }
-
-        .company-header {
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            margin-bottom: 30px;
-        }
-
-        .company-name {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 4px;
-        }
-
-        .company-location {
-            font-size: 14px;
-            color: #a0aec0;
-        }
-
-        .obsession-widget {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .obsession-score-large {
-            font-size: 36px;
-            font-weight: bold;
-        }
-
-        .nav-menu {
-            list-style: none;
-        }
-
-        .nav-item {
-            margin-bottom: 8px;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            color: #a0aec0;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-
-        .nav-link.active {
-            background: rgba(102, 126, 234, 0.2);
-            color: #667eea;
-        }
-
-        .nav-icon {
-            width: 20px;
-            text-align: center;
-        }
-
         /* Main Content */
         .main-content {
-            margin-left: 280px;
             padding: 30px;
+            width: 100%;
         }
 
         .cohorts-header {
@@ -818,12 +744,8 @@
         }
 
         @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-            
             .main-content {
-                margin-left: 0;
+                padding: 20px;
             }
             
             .scenario-variables {
@@ -1027,39 +949,35 @@
             };
 
             return (
-                <div>
-                    <Sidebar obsessionScore={obsessionScore} />
-                    
-                    <div className="main-content">
-                        <div className="cohorts-header">
-                            <h1 className="cohorts-title">🎯 Strategy Cohorts</h1>
-                            <p className="cohorts-subtitle">
-                                AI-powered scenario analysis and strategic decision-making for complex business challenges
-                            </p>
+                <div className="main-content">
+                    <div className="cohorts-header">
+                        <h1 className="cohorts-title">🎯 Strategy Cohorts</h1>
+                        <p className="cohorts-subtitle">
+                            AI-powered scenario analysis and strategic decision-making for complex business challenges
+                        </p>
+                    </div>
+
+                    <div className="cohorts-layout">
+                        <div>
+                            <ScenarioBuilder
+                                scenarioDescription={scenarioDescription}
+                                setScenarioDescription={setScenarioDescription}
+                                selectedScenarioType={selectedScenarioType}
+                                setSelectedScenarioType={setSelectedScenarioType}
+                                scenarioTypes={scenarioTypes}
+                                scenarioVariables={scenarioVariables}
+                                setScenarioVariables={setScenarioVariables}
+                                scenarioTemplates={scenarioTemplates}
+                                runCohort={runCohort}
+                            />
+
+                            <ActiveCohorts
+                                activeCohorts={activeCohorts}
+                                viewCohortResults={viewCohortResults}
+                            />
                         </div>
 
-                        <div className="cohorts-layout">
-                            <div>
-                                <ScenarioBuilder
-                                    scenarioDescription={scenarioDescription}
-                                    setScenarioDescription={setScenarioDescription}
-                                    selectedScenarioType={selectedScenarioType}
-                                    setSelectedScenarioType={setSelectedScenarioType}
-                                    scenarioTypes={scenarioTypes}
-                                    scenarioVariables={scenarioVariables}
-                                    setScenarioVariables={setScenarioVariables}
-                                    scenarioTemplates={scenarioTemplates}
-                                    runCohort={runCohort}
-                                />
-
-                                <ActiveCohorts
-                                    activeCohorts={activeCohorts}
-                                    viewCohortResults={viewCohortResults}
-                                />
-                            </div>
-
-                            <StrategyControlPanel activeCohorts={activeCohorts} />
-                        </div>
+                        <StrategyControlPanel activeCohorts={activeCohorts} />
                     </div>
 
                     <CohortResultsModal
@@ -1067,43 +985,6 @@
                         onClose={() => setShowModal(false)}
                         content={modalContent}
                     />
-                </div>
-            );
-        }
-
-        // Sidebar Component
-        function Sidebar({ obsessionScore }) {
-            const navItems = [
-                { id: 'intelligence', icon: '🏠', name: 'Intelligence Feed', active: false },
-                { id: 'swarms', icon: '🔬', name: 'Research Swarms', active: false },
-                { id: 'cohorts', icon: '🎯', name: 'Strategy Cohorts', active: true },
-                { id: 'psychographics', icon: '🧠', name: 'Psychographics', active: false },
-                { id: 'brewery', icon: '🍺', name: 'The Brewery', active: false }
-            ];
-
-            return (
-                <div className="sidebar">
-                    <div className="company-header">
-                        <div className="company-name">TaskFlow</div>
-                        <div className="company-location">🚀 Project Management SaaS</div>
-                    </div>
-
-                    <div className="obsession-widget">
-                        <div style={{fontSize: '12px', opacity: 0.9, marginBottom: '8px'}}>Business Obsession</div>
-                        <div className="obsession-score-large">{obsessionScore.toFixed(1)}</div>
-                        <div style={{fontSize: '14px', opacity: 0.9, marginTop: '4px'}}>Obsessed</div>
-                    </div>
-
-                    <ul className="nav-menu">
-                        {navItems.map(item => (
-                            <li key={item.id} className="nav-item">
-                                <a href="#" className={`nav-link ${item.active ? 'active' : ''}`}>
-                                    <span className="nav-icon">{item.icon}</span>
-                                    <span>{item.name}</span>
-                                </a>
-                            </li>
-                        ))}
-                    </ul>
                 </div>
             );
         }
@@ -1424,7 +1305,6 @@
 
             return (
                 <div className="strategy-control-panel">
-                    {/* Strategy Statistics */}
                     <div className="strategy-stats">
                         <h3 className="strategy-stats-title">📊 Cohort Statistics</h3>
                         <div className="strategy-stats-grid">
@@ -1447,7 +1327,6 @@
                         </div>
                     </div>
 
-                    {/* Strategy Templates */}
                     <div className="strategy-templates">
                         <h3 className="strategy-stats-title">🚀 Strategy Templates</h3>
                         {strategyTemplates.map((template, index) => (
@@ -1458,7 +1337,6 @@
                         ))}
                     </div>
 
-                    {/* Recent Strategic Insights */}
                     <div className="recent-strategies">
                         <h3 className="strategy-stats-title">💡 Recent Strategic Insights</h3>
                         {recentStrategies.map((strategy, index) => (
@@ -1544,7 +1422,6 @@
                         </div>
 
                         <div className="scenario-analysis">
-                            {/* Executive Summary */}
                             <div className="analysis-section">
                                 <h3>📋 Executive Summary</h3>
                                 <p style={{lineHeight: '1.6', color: '#4a5568', marginBottom: '16px'}}>
@@ -1558,7 +1435,6 @@
                                 </div>
                             </div>
 
-                            {/* Scenario Comparison */}
                             <div className="analysis-section">
                                 <h3>📊 Scenario Outcomes Comparison</h3>
                                 <div className="scenarios-comparison">
@@ -1618,7 +1494,6 @@
                                 </div>
                             </div>
 
-                            {/* Risk Analysis */}
                             <div className="analysis-section">
                                 <h3>⚠️ Risk Assessment Matrix</h3>
                                 <div className="risk-matrix">
@@ -1631,7 +1506,6 @@
                                 </div>
                             </div>
 
-                            {/* Strategic Recommendations */}
                             <div className="analysis-section">
                                 <h3>🎯 Strategic Recommendations</h3>
                                 <div className="strategic-recommendations">
@@ -1650,7 +1524,6 @@
                                 </div>
                             </div>
 
-                            {/* Success Metrics */}
                             <div className="analysis-section">
                                 <h3>📈 Success Metrics & KPIs</h3>
                                 <div style={{background: 'white', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '16px'}}>
